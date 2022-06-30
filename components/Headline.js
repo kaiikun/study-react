@@ -1,6 +1,6 @@
 import styles from '../styles/Home.module.css'
 
-export default function Headline(props) {
+export function Headline(props) {
   return (
     <div >
         <h1 className={styles.title}>
@@ -9,8 +9,10 @@ export default function Headline(props) {
 
         <p className={styles.description}>
           Get started by editing{' '}
-          <code className={styles.code}>pages/{props.title}.js</code>
+          {props.children}
+          <button onClick={props.onClick}>ボタン</button>
         </p>
+        
 
     </div>
   )
