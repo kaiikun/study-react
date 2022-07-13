@@ -7,10 +7,18 @@ import { useCallback, useEffect, useState } from 'react'
 
 export default function Home() {
   const [count, setCount] = useState(1);
+  const [text, setText] = useState("");
+  const [isShow,setIsShow] = useState(true);
 
   const handleClick = (e) => {
     setCount((count) => count + 1)
   }
+
+  const handleDisplay = useCallback(() => {
+    setIsShow( (isShow) => {
+      return !isShow;
+    })
+  })
 
   useEffect(()=>{
     document.body.style.background = "lightblue";
@@ -19,16 +27,29 @@ export default function Home() {
     };
   });
 
+  const handleChange = useCallback((e) => {
+    if(e.target.value.length >= 5){
+      alert("多いよ〜");
+      return;
+    }
+    setText(e.target.value.trim())
+  })
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
       </Head>
       <Header />
-      <div>{count}</div>
+      {isShow ? <h1>{count}</h1> : null}
+      <input 
+        type="text" 
+        value={text} 
+        onChange={handleChange}/>
       <button 
         onClick={handleClick}>ボタン
       </button>
+      <button onClick={handleDisplay}>{isShow ? "非表示" : "表示"}</button>
       <Main page="index" />
      <Footer />
     </div>
