@@ -9,6 +9,7 @@ export default function Home() {
   const [count, setCount] = useState(1);
   const [text, setText] = useState("");
   const [isShow,setIsShow] = useState(true);
+  const [array,setArray] = useState([]);
 
   const handleClick = (e) => {
     setCount((count) => count + 1)
@@ -20,6 +21,16 @@ export default function Home() {
     })
   })
 
+  const handleAdd = useCallback(() => {
+    setArray((prevArray) => {
+      if (prevArray.some((item) => item === text)) {
+        alert("同じ奴はだめ")
+      }
+      const newArray = [...prevArray,text];
+      return newArray;
+    });
+  },[text]);
+
   useEffect(()=>{
     document.body.style.background = "lightblue";
     return() => {
@@ -28,11 +39,7 @@ export default function Home() {
   });
 
   const handleChange = useCallback((e) => {
-    if(e.target.value.length >= 5){
-      alert("多いよ〜");
-      return;
-    }
-    setText(e.target.value.trim())
+    setText(e.target.value)
   })
 
   return (
@@ -50,6 +57,14 @@ export default function Home() {
         onClick={handleClick}>ボタン
       </button>
       <button onClick={handleDisplay}>{isShow ? "非表示" : "表示"}</button>
+
+      <button onClick={handleAdd}>テェい</button>
+      <ul>{array.map(item => {
+        return(
+          <list key={item}>{item}</list>
+        )
+        
+      })}</ul>
       <Main page="index" />
      <Footer />
     </div>
