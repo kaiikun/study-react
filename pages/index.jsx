@@ -5,21 +5,30 @@ import { Main } from '../components/Main'
 import { Header } from '../components/Header'
 import { useCallback, useEffect, useState } from 'react'
 
-export default function Home() {
+
+const useCounter = () => {
   const [count, setCount] = useState(1);
-  const [text, setText] = useState("");
   const [isShow,setIsShow] = useState(true);
-  const [array,setArray] = useState([]);
 
   const handleClick = (e) => {
     setCount((count) => count + 1)
   }
-
-  const handleDisplay = useCallback(() => {
+  
+  const handleDisplay = () => {
     setIsShow( (isShow) => {
       return !isShow;
     })
-  })
+  }
+
+  return(count, isShow , handleClick, handleDisplay)
+}
+
+export default function Home(props) { 
+
+  console.log(props)
+  const {count, isShow , handleClick, handleDisplay} = useCounter()
+  const [text, setText] = useState("");
+  const [array,setArray] = useState([]);
 
   const handleAdd = useCallback(() => {
     setArray((prevArray) => {
@@ -38,9 +47,9 @@ export default function Home() {
     };
   });
 
-  const handleChange = useCallback((e) => {
+  const handleChange = (e) => {
     setText(e.target.value)
-  })
+  }
 
   return (
     <div className={styles.container}>
