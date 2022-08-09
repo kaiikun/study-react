@@ -1,5 +1,7 @@
 
+import Link from 'next/link';
 import { useCallback, useEffect, useState, useReducer } from 'react' 
+import useSWR from 'swr'
 
 const initialStage = {
   data : [],
@@ -26,12 +28,11 @@ const reducer = (state,action) => {
   }
 }
 
-export default function Posts(props) { 
-  // const [posts,setPosts] = useState([]);
-  // const [loading,setLoading] = useState(true);
-  // const [error,setError] = useState(null);
-  const [state,dispatch] = useReducer(reducer,initialStage)
+export default function Posts() { 
+  // const { data, error } = useSWR("https://jsonplaceholder.typicode.com/posts");
+  // console.log({data, error});
 
+  const [state,dispatch] = useReducer(reducer,initialStage)
   const getPosts = useCallback(async() => {
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/posts");
@@ -43,13 +44,6 @@ export default function Posts(props) {
     } catch (error) {
      dispatch({type:"error",error}) 
     }
-    // setLoading(false);
-    // setState(prevState => {
-    //   return{
-    //     ...prevState,
-    //     loading : false,
-    //   }
-    // })
   },[])
 
 // getPostsの実行をする関数の定義↓
@@ -57,11 +51,11 @@ export default function Posts(props) {
     getPosts();
   },[getPosts])
 
-if (state.loading){
+if (state.data === 0){
     return <div>読み込みなう</div> 
 }
 if (state.error){
-    return <div>{state.error.message}</div> 
+    return <div>{error.message}</div> 
 }
 if (state.data.length === 0){
     return <div>データは空だよ</div> 
@@ -73,7 +67,11 @@ if (state.data.length === 0){
         <ol>
           {state.data.map(post => {
             return(
-              <li key={post.id}>{post.title}</li>
+              <li key={post.id}>
+                <Link href={`posts/${post.id}`}>
+                  <a>{post.title}</a>
+                </Link>
+              </li>
             )
           })}
         </ol>
